@@ -51,5 +51,8 @@ public class UserService {
 
         return repo.save(currentUser);
     }
+    public boolean existById(Long id){
+        return repo.existsById(id);
+    }
 
 }

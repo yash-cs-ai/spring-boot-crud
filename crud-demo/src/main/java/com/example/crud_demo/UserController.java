@@ -1,6 +1,7 @@
 package com.example.crud_demo;
 
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +44,28 @@ public class UserController {
     public User patchUser(@PathVariable Long id, @RequestBody User userDetails){
         return service.patchUser(id,userDetails);
     }
-}
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.HEAD)
+    public ResponseEntity<Void> userExists(@PathVariable Long id){
+        boolean exists = service.existById(id);
+        if(exists){
+            return ResponseEntity.ok().build();
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.OPTIONS)
+        public ResponseEntity<Void> optionsUserbyId () {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Allow", "GET, PUT, DELETE, HEAD, OPTIONS");
+            headers.add("Access-Control-Allow-Methods", "GET, PUT, DELETE, HEAD, OPTIONS");
+            headers.add("Access-Control-Allow-Headers", "Content type, Authorization");
+            headers.add("Access-Control-Allow-Origin", "*");
+
+            return ResponseEntity.ok().headers(headers).build();
+        }
+    }
+
 
